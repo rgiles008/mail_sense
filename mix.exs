@@ -33,9 +33,8 @@ defmodule MailSense.MixProject do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
-
   # Specifies your project dependencies.
+  defp elixirc_paths(_), do: ["lib"]
   #
   # Type `mix help deps` for examples and options.
   defp deps do
@@ -65,6 +64,14 @@ defmodule MailSense.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
+      {:oban, "~> 2.17"},
+      {:ueberauth, "~> 0.10"},
+      {:ueberauth_google, "~> 0.10"},
+      {:oauth2, "~> 2.1"},
+      {:google_api_gmail, "~> 0.17.0"},
+      {:gen_smtp, "~> 1.2"},
+      {:finch, "~> 0.18"},
+      {:cloak_ecto, "~> 1.3"},
       {:bandit, "~> 1.5"}
     ]
   end
