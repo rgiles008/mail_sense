@@ -29,7 +29,36 @@ config :mail_sense, MailSenseWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :mail_sense, MailSense.Mailer, adapter: Swoosh.Adapters.Local
+config :mail_sense, MailSense.Mailer, adapter: Swoosh.Adapters.SMTP
+config :swoosh, :api_client, false
+
+config :mail_sense, Oban,
+  repo: MailSense.Repo,
+  queues: [imports: 2, ai: 2, ops: 1],
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 86_400},
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"*/2 * * * *", MailSense.Workers.ImportWorker}
+     ]}
+  ]
+
+config :ueberauth, Ueberauth,
+  providers: [
+    google:
+      {Ueberauth.Strategy.Google,
+       [
+         default_scope:
+           "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.send openid email profile",
+         access_type: "offline",
+         prompt: "consent"
+       ]}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Google.OAuth,
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+  redirect_uri: System.get_env("GOOGLE_REDIRECT_URI")
 
 # Configure esbuild (the version is required)
 config :esbuild,

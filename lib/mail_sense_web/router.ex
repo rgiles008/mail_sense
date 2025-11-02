@@ -8,14 +8,22 @@ defmodule MailSenseWeb.Router do
     plug :put_root_layout, html: {MailSenseWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", MailSenseWeb do
+  scope "/auth", MailSenseWeb do
     pipe_through :browser
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    delete "/logout", AuthController, :delete
+  end
+
+  scope "/", MailSenseWeb do
+    pipe_through [:browser, :require_user]
 
     get "/", PageController, :home
   end
@@ -40,5 +48,17 @@ defmodule MailSenseWeb.Router do
       live_dashboard "/dashboard", metrics: MailSenseWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  defp fetch_current_user(conn, _opts) do
+    user_id = get_session(conn, :user_id)
+
+    assign(conn, :current_user, user_id && MailSense.Accounts.get_user(user_id))
+  end
+
+  defp require_user(conn, _opts) do
+    if conn.assigns[:current_user],
+      do: conn,
+      else: Phoenix.Controller.redirect(conn, to: "/auth/google") |> Plug.Conn.halt()
   end
 end

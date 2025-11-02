@@ -12,10 +12,12 @@ defmodule MailSense.Application do
       MailSense.Repo,
       {DNSCluster, query: Application.get_env(:mail_sense, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: MailSense.PubSub},
+      {Finch, name: MailSenseFinch},
       # Start a worker by calling: MailSense.Worker.start_link(arg)
       # {MailSense.Worker, arg},
       # Start to serve requests, typically the last entry
-      MailSenseWeb.Endpoint
+      MailSenseWeb.Endpoint,
+      {Oban, Application.fetch_env!(:mail_sense, Oban)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
