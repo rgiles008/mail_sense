@@ -1,0 +1,26 @@
+app = "mail_sense"
+primary_region = "iad"
+
+
+[build]
+  dockerfile = "Dockerfile"
+
+
+[env]
+  PHX_SERVER = "true"
+  PORT = "8080"
+
+
+[[services]]
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+[services.concurrency]
+  hard_limit = 25
+  soft_limit = 20
+[[services.ports]]
+  port = 80
+  handlers = ["http"]
+[[services.ports]]
+  port = 443
+  handlers = ["tls", "http"]

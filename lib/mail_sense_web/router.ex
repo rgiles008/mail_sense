@@ -24,6 +24,13 @@ defmodule MailSenseWeb.Router do
 
   scope "/", MailSenseWeb do
     pipe_through [:browser, :require_user]
+    live "/", DashboardLive
+    live "/categories/new", CategoryFormLive
+    live "/categories/:id", CategoryShowLive
+  end
+
+  scope "/", MailSenseWeb do
+    pipe_through [:browser, :require_user]
 
     get "/", PageController, :home
   end
