@@ -29,12 +29,6 @@ defmodule MailSenseWeb.Router do
     live "/categories/:id", CategoryShowLive
   end
 
-  scope "/", MailSenseWeb do
-    pipe_through [:browser, :require_user]
-
-    get "/", PageController, :home
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", MailSenseWeb do
   #   pipe_through :api
