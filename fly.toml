@@ -1,26 +1,36 @@
-app = "mail_sense"
-primary_region = "iad"
+# fly.toml app configuration file generated for mail-sense on 2025-11-03T10:42:28-05:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
+app = 'mail-sense'
+primary_region = 'iad'
 
 [build]
-  dockerfile = "Dockerfile"
-
+  dockerfile = 'Dockerfile'
 
 [env]
-  PHX_SERVER = "true"
-  PORT = "8080"
-
+  PHX_SERVER = 'true'
+  PORT = '8080'
 
 [[services]]
+  protocol = 'tcp'
   internal_port = 8080
-  processes = ["app"]
-  protocol = "tcp"
-[services.concurrency]
-  hard_limit = 25
-  soft_limit = 20
-[[services.ports]]
-  port = 80
-  handlers = ["http"]
-[[services.ports]]
-  port = 443
-  handlers = ["tls", "http"]
+  processes = ['app']
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

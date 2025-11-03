@@ -1,0 +1,2 @@
+ExUnit.configure(exclude: [])
+{:ok, _} = Application.ensure_all_started(:bypass)

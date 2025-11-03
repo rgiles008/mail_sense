@@ -35,3 +35,14 @@ config :phoenix, :plug_init_mode, :runtime
 # Enable helpful, but potentially expensive runtime checks
 config :phoenix_live_view,
   enable_expensive_runtime_checks: true
+
+# central place we’ll read from
+config :mail_sense, MailSense.HTTP,
+  # test will override per-case
+  gmail_api_base: "http://127.0.0.1",
+  openai_api_base: "http://127.0.0.1"
+
+config :mail_sense, Oban, testing: :inline
+
+# Ecto sandbox, etc.
+config :mail_sense, MailSense.Repo, pool: Ecto.Adapters.SQL.Sandbox

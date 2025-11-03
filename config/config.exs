@@ -6,6 +6,8 @@
 
 # General application configuration
 import Config
+config :mail_sense, :http_client, MailSense.HTTPReq
+config :mail_sense, MailSense.HTTP, gmail_api_base: "https://gmail.googleapis.com"
 
 config :mail_sense,
   ecto_repos: [MailSense.Repo],
@@ -39,7 +41,7 @@ config :mail_sense, Oban,
     {Oban.Plugins.Pruner, max_age: 86_400},
     {Oban.Plugins.Cron,
      crontab: [
-       {"*/2 * * * *", MailSense.Workers.ImportWorker}
+       {"*/2 * * * *", MailSense.Workers.HistoryPoller}
      ]}
   ]
 

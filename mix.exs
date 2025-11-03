@@ -72,7 +72,9 @@ defmodule MailSense.MixProject do
       {:gen_smtp, "~> 1.2"},
       {:finch, "~> 0.18"},
       {:cloak_ecto, "~> 1.3"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:ex_machina, "~> 2.7", only: :test},
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 

@@ -8,6 +8,8 @@ defmodule MailSense.Accounts.GmailAccount do
     field :access_token, :string
     field :refresh_token, :string
     field :expires_at, :utc_datetime
+    field :history_id, :string
+    field :last_polled_at, :utc_datetime
 
     belongs_to :user, MailSense.Accounts.User
 
@@ -16,7 +18,14 @@ defmodule MailSense.Accounts.GmailAccount do
 
   def changeset(gmail_account, attrs) do
     gmail_account
-    |> cast(attrs, [:email, :access_token, :refresh_token, :expires_at])
+    |> cast(attrs, [
+      :email,
+      :access_token,
+      :refresh_token,
+      :expires_at,
+      :history_id,
+      :last_polled_id
+    ])
     |> validate_required([:user_id, :email, :access_token, :refresh_token])
     |> unique_constraint([:email, :user_id])
   end

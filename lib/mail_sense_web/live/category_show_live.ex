@@ -5,6 +5,7 @@ defmodule MailSenseWeb.CategoryShowLive do
   alias MailSense.Repo
   alias MailSense.Mail.Category
   alias MailSense.Mail.Email
+  alias MailSense.Mail.GmailClient
   alias MailSense.Mail.MailContext
 
   def mount(%{"id" => id}, _session, socket) do
@@ -121,7 +122,7 @@ defmodule MailSenseWeb.CategoryShowLive do
 
   defp modify_gmail_labels(conn, email, message_ids) do
     Enum.map(message_ids, fn mid ->
-      _ = Mailgpt.Mail.GmailClient.modify_labels(conn, email, mid, ["TRASH"], [])
+      _ = GmailClient.modify_labels(conn, email, mid, ["TRASH"], [])
     end)
   end
 end

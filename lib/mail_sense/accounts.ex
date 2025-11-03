@@ -66,4 +66,14 @@ defmodule MailSense.Accounts do
     Repo.get_by(Category, user_id: uid, name: name) ||
       Repo.insert!(%Category{user_id: uid, name: name})
   end
+
+  def update_gmail_account!(acct, attrs) do
+    acct
+    |> GmailAccount.changeset(attrs)
+    |> Repo.update!()
+  end
+
+  def update_history_id!(acct, history_id) do
+    update_gmail_account!(acct, %{history_id: history_id, last_polled_at: DateTime.utc_now()})
+  end
 end

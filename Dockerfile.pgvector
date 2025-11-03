@@ -1,0 +1,18 @@
+FROM flyio/postgres-flex:17.2
+
+# Build deps
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      build-essential curl ca-certificates \
+      postgresql-server-dev-17 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Build & install pgvector (pick a version tag)
+ARG PGVECTOR_VERSION=0.8.1
+RUN set -eux; \
+    curl -L -o /tmp/pgvector.tar.gz "https://github.com/ankane/pgvector/archive/refs/tags/v${PGVECTOR_VERSION}.tar.gz"; \
+    tar -xzf /tmp/pgvector.tar.gz -C /tmp; \
+    cd "/tmp/pgvector-${PGVECTOR_VERSION}"; \
+    make PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config; \
+    make install PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config; \
+    rm -rf /tmp/pgvector*;
